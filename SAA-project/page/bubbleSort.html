@@ -1,0 +1,109 @@
+<!--Simeon Chakarov, 471219004-->
+
+<!DOCTYPE html>
+<html style="background-color: black;">
+  <head>
+    <title>Bubble Sort</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  </head>
+
+  <body>
+
+    <button class="button is-warning" onclick=createCanvas()>Generate data</button>
+    <button class="button is-danger" onclick=bubbleSort()>Bubble sort it!</button>
+
+    <script>
+      
+      var bars = []
+
+      function generateNumbers() {
+        var numbers = [];
+  
+        for (var i = 0; i < 20; i++) {
+          numbers.push(Math.floor(Math.random() * 100) + 3);
+        }
+
+        return numbers
+      }
+
+      function createBar(index, value) {
+
+        const div = document.createElement("div");
+        div.id = 'bar' + index
+        div.innerHTML = value;
+        div.style.color = 'black'; //text
+        div.style.textAlign = "right";
+        div.style.background = 'orange';
+        div.style.padding = '2.5px';
+        div.style.margin = '1px';
+        div.style.width = (value * 10) + 'px'
+
+        return div
+      }
+
+      function createCanvas() {
+        
+        bars = []//Refresh array if there is already created bar plot
+
+        if (document.getElementById("barPlot") != null) {
+          document.getElementById("barPlot").remove()
+        }//Refresh the barplot if there is already generated one
+
+        var barPlot = document.createElement("div");
+        barPlot.id = "barPlot"
+
+        numbers = generateNumbers()
+        var i;
+        for (i = 0; i < numbers.length; i++) {
+          var currBar = createBar(i, numbers[i]);
+          barPlot.appendChild(currBar);
+          bars.push(currBar)
+        }
+        document.body.append(barPlot)
+      }
+
+      function bubbleSort(i = 1, switched = false) {
+
+        if (i > 1) {
+          bars[i - 1].style.background = 'orange';
+          bars[i - 2].style.background = 'orange';
+        }
+
+        if (i == bars.length && switched == false) {
+          return true;
+        } else if (i == bars.length && switched == true) {
+          i = 1;
+          switched = false;
+        }
+
+        bars[i - 1].style.background = 'lightblue'; //Highlight the bars that are about to be compared
+        bars[i].style.background = 'lightblue';
+
+        setTimeout(function() {
+
+          var left_val = parseInt(bars[i - 1].innerHTML);
+          var right_val = parseInt(bars[i].innerHTML);
+
+          if (right_val < left_val) {
+            switchBars(bars[i - 1], bars[i])
+            switched = true;
+          }
+
+          bubbleSort(i + 1, switched) //recursive
+          
+        }, 10);
+      }
+
+      function switchBars(bar1, bar2) {
+        curr1 = bar1.innerHTML
+        curr2 = bar1.style.width
+
+        bar1.innerHTML = bar2.innerHTML
+        bar1.style.width = bar2.style.width
+
+        bar2.innerHTML = curr1
+        bar2.style.width = curr2
+      }
+    </script>
+  </body>
+</html>
